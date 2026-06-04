@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OPV Energy Loss Analyzer</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside>
+        <section>
+          <h2>Data</h2>
+          <div class="upload-group">
+            <div class="upload-label">EQE CSV</div>
+            <label class="dropzone" data-key="eqe">
+              <input type="file" id="eqeFile" accept=".csv,.txt" />
+              <span>Choose or drop EQE CSV</span>
+              <strong id="eqeName">Required</strong>
+            </label>
+            <button class="file-remove" type="button" data-clear="eqe">Unload</button>
+          </div>
+          <div class="upload-group">
+            <div class="upload-label">FTPS-EQE CSV</div>
+            <label class="dropzone" data-key="seqe">
+              <input type="file" id="seqeFile" accept=".csv,.txt" />
+              <span>Choose or drop FTPS-EQE CSV</span>
+              <strong id="seqeName">Optional</strong>
+            </label>
+            <button class="file-remove" type="button" data-clear="seqe">Unload</button>
+          </div>
+          <div class="upload-group">
+            <div class="upload-label">EQE_EL CSV</div>
+            <label class="dropzone" data-key="eqeEl">
+              <input type="file" id="eqeElFile" accept=".csv,.txt" />
+              <span>Choose or drop EQE_EL CSV</span>
+              <strong id="eqeElName">Required</strong>
+            </label>
+            <button class="file-remove" type="button" data-clear="eqeEl">Unload</button>
+          </div>
+        </section>
+
+        <section>
+          <h2>Parameters</h2>
+          <label class="field">
+            <span>Radiative EQE max (nm)</span>
+            <input id="eqeRange" type="number" value="1150" min="300" max="2500" step="1" />
+          </label>
+          <label class="field">
+            <span>EQE_EL current (mA cm^-2)</span>
+            <input id="elCurrent" type="number" placeholder="Use calculated Jsc" min="0" step="0.001" />
+          </label>
+          <label class="field">
+            <span>Temperature (K)</span>
+            <input id="temperature" type="number" value="300" min="1" step="0.1" />
+          </label>
+          <label class="field">
+            <span>Voc (V)</span>
+            <input id="voc" type="number" placeholder="Optional" min="0" step="0.001" />
+          </label>
+        </section>
+
+        <section>
+          <h2>Save</h2>
+          <label class="field">
+            <span>CSV filename prefix</span>
+            <input id="csvPrefix" type="text" placeholder="energy_loss" />
+          </label>
+        </section>
+        <div id="status" class="status">Waiting for spectra.</div>
+      </aside>
+
+      <main>
+        <header>
+          <div>
+            <h1>OPV Energy Loss Analyzer</h1>
+            <p>Upload spectra, calculate detailed-balance losses, inspect E1 / E2 / E3.</p>
+          </div>
+        </header>
+
+        <section class="panel">
+          <div class="actions-bar">
+            <button id="calculateBtn" class="primary" type="button">Calculate</button>
+            <button id="saveCsvBtn" type="button" disabled>Save CSV</button>
+            <button id="refreshBtn" type="button">Refresh</button>
+          </div>
+          <div class="panel-title">
+            <h2>Results</h2>
+            <span id="modeBadge">No calculation</span>
+          </div>
+          <div id="resultsGrid" class="results-grid">
+            <div class="empty">Run a calculation to view parameters.</div>
+          </div>
+        </section>
+
+        <section class="panel chart-panel">
+          <div class="panel-title">
+            <h2>Energy Loss Components</h2>
+            <span>E1, E2, E3</span>
+          </div>
+          <canvas id="lossChart" width="1100" height="520"></canvas>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
