@@ -4,6 +4,16 @@
 
 > 本工具主要用于内部科研分析和数据整理，计算结果应结合原始谱图质量、器件测试条件和人工判断共同使用。
 
+## 在线访问
+
+已部署到 Render：
+
+```text
+https://energy-loss.onrender.com/
+```
+
+也可以直接打开：[https://energy-loss.onrender.com/](https://energy-loss.onrender.com/)
+
 ## 理论基础
 
 OPV 的开路电压损失通常可拆分为三部分：
@@ -157,6 +167,18 @@ JSC mA/cm2,EQE_EL_%
 
 ## 运行方法
 
+### 在线使用
+
+直接访问：
+
+```text
+https://energy-loss.onrender.com/
+```
+
+Render 免费实例在长时间无人访问后可能会休眠，首次打开可能需要等待几十秒。
+
+### 本地使用
+
 1. 确认电脑已安装 Python，并已安装 `numpy`、`pandas`、`scipy`。
 2. 打开项目文件夹。
 3. 运行根目录中的 `webui.py`。
@@ -164,6 +186,34 @@ JSC mA/cm2,EQE_EL_%
 5. 在页面中上传数据并点击 `Calculate`。
 
 如果双击 `webui.py` 后窗口一闪而过，通常说明 Python 环境或依赖没有配置好。可先联系项目维护同学检查环境。
+
+### Render 配置
+
+本项目已经包含 Render 部署所需文件：
+
+- `requirements.txt`：Python 依赖列表。
+- `render.yaml`：Render Blueprint 配置文件。
+
+当前 Render 配置如下：
+
+```yaml
+services:
+  - type: web
+    name: energy-loss
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python webui.py --host 0.0.0.0
+    healthCheckPath: /
+```
+
+其中 `startCommand` 只需要写：
+
+```bash
+python webui.py --host 0.0.0.0
+```
+
+端口由 Render 自动提供，程序会读取环境变量 `PORT`。
 
 ## 项目结构
 
@@ -184,6 +234,9 @@ Energy-Loss/
 ├── sEQE.csv                # 示例 FTPS-EQE / sEQE 数据
 ├── EQE_EL.csv              # 示例 EQE_EL 数据
 ├── DESIGN_SPEC.md          # WebUI 设计规范
+├── LICENSE                 # MIT 协议
+├── render.yaml             # Render 部署配置
+├── requirements.txt        # Python 依赖列表
 ├── webui.py                # WebUI 启动入口
 └── README.md
 ```
