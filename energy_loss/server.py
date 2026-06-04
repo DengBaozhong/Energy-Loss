@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import socket
 import tempfile
 from argparse import Namespace
@@ -129,7 +130,7 @@ class EnergyLossHandler(SimpleHTTPRequestHandler):
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Run the local Energy Loss WebUI.")
     parser.add_argument("--host", default="127.0.0.1", help="Host address to bind.")
-    parser.add_argument("--port", type=int, default=8765, help="Preferred port.")
+    parser.add_argument("--port", type=int, default=int(os.environ.get("PORT", "8765")), help="Preferred port.")
     return parser
 
 
@@ -147,7 +148,7 @@ def find_available_port(host: str, preferred_port: int) -> int:
 def main() -> None:
     args = build_parser().parse_args()
     host = args.host
-    port = find_available_port(host, args.port)
+    port = args.port if "PORT" in os.environ else find_available_port(host, args.port)
     server = ThreadingHTTPServer((host, port), EnergyLossHandler)
     print(f"Energy Loss WebUI running at http://{host}:{port}")
     print("Press Ctrl+C to stop.")
