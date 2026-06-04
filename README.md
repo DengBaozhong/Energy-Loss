@@ -89,7 +89,7 @@ E2 + E3
 | `E3_eV` | 非辐射复合损失，`-kT ln(EQE_EL)` | eV |
 | `E_loss_total_eV` | `E1 + E2 + E3` | eV |
 | `Jsc_rad_mA_cm2` | 由 EQE 与 AM1.5G 光谱积分得到的辐射极限短路电流密度 | mA cm^-2 |
-| `J0_rad_A_m2` | 由辐射 EQE 与黑体光子通量积分得到的辐射暗饱和电流密度 | A m^-2 |
+| `J0_rad_A_m2` | 由辐射 EQE 与黑体光子通量积分得到的辐射暗饱和电流密度 | mA cm^-2 |
 | `EQE_EL_at_Jsc` | 指定电流或 `Jsc,rad` 处插值得到的 EQE_EL | 无量纲 |
 | `sEQE_scale` | 将 sEQE 缩放到普通 EQE 标度的乘法因子 | 无量纲 |
 | `sEQE_switch_nm` | 普通 EQE 切换到 sEQE 的波长 | nm |
