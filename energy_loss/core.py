@@ -92,6 +92,14 @@ def pick_first_numeric_column(df: pd.DataFrame, exclude: set[str] | None = None)
     raise ValueError(f"Cannot find a numeric column. Columns are: {list(df.columns)}")
 
 
+def spectral_axis_to_wavelength_nm(values: np.ndarray, path: Path) -> np.ndarray:
+    if np.nanmax(values) <= 10.0:
+        if np.any(values <= 0):
+            raise ValueError(f"{path} energy values must be positive when the first spectral column is in eV.")
+        return 1240.0 / values
+    return values
+
+
 def load_eqe(path: Path) -> tuple[np.ndarray, np.ndarray]:
     df = read_table(path)
     wavelength_col = pick_column_or_position(df, ("wavelength", "wvlgth", "lambda", "nm"), 0)
@@ -105,6 +113,8 @@ def load_eqe(path: Path) -> tuple[np.ndarray, np.ndarray]:
 
     if len(wavelength_nm) < 2:
         raise ValueError(f"{path} needs at least two wavelength/EQE data points.")
+
+    wavelength_nm = spectral_axis_to_wavelength_nm(wavelength_nm, path)
 
     if np.nanmax(eqe) > 1.0:
         eqe = eqe / 100.0
